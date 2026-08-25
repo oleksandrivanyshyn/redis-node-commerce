@@ -1,4 +1,8 @@
-import type { CreateUserAttrs, Session } from '$services/types';
+import type {
+  CreateSessionDto,
+  CreateUserAttrs,
+  Session,
+} from '$services/types';
 import { sessionsKey } from '$services/keys';
 import { client } from '$services/redis';
 
@@ -13,7 +17,13 @@ export const saveSession = async (session: Session) => {};
 const deserialize = (id: string, session: Record<string, string>) => {
   return {
     id,
+    userId: session.userId,
     username: session.username,
-    password: session.password,
+  };
+};
+const serialize = (session: Session) => {
+  return {
+    userId: session.userId,
+    username: session.username,
   };
 };
