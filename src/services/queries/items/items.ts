@@ -1,12 +1,31 @@
-import type { CreateItemAttrs } from '$services/types';
+import type { CreateItemAttrs, Item } from '$services/types';
 import { client } from '$services/redis';
 import { serialize } from './serialize';
 import { genId } from '$services/utils';
 import { itemsKey } from '$services/keys';
+import { deserialize } from './deserialize';
 
-export const getItem = async (id: string) => {};
+export const getItem = async (id: string) => {
+  const item = await client.hGetAll(itemsKey(id));
 
-export const getItems = async (ids: string[]) => {};
+  if (Object.keys(item).length === 0) {
+    return null;
+  }
+
+  return deserialize(id, item);
+};
+
+export const getItems = async (ids: string[]) => {
+  const items: Item[] = [];
+  for (const id of ids) {
+    const item = await client.hGetAll(itemsKey(id));
+    if (Object.keys(item).length > 0) {
+
+      items.push(deserialize(id, item));
+    }
+  }
+  return items;
+};
 
 export const createItem = async (attrs: CreateItemAttrs) => {
   const id = genId();
