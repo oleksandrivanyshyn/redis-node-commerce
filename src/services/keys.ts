@@ -1,7 +1,10 @@
 export const pageCacheKey = (id: string) => `pagecache#${id}`;
-export const usersKey = (id: string) => `users#${id}`;
-export const sessionsKey = (id: string) => `sessions#${id}`;
-export const itemsKey = (id: string) => `items#${id}`;
-export const usernamesUniqueKey = () => `usernames:unique`;
-export const userLikesKey = (id: string) => `user:likes#${id}`;
-export const usernamesKey = () => `usernames`;
+export const usersKey = (userId: string) => `users#${userId}`;
+export const sessionsKey = (sessionId: string) => `sessions#${sessionId}`;
+export const usernamesUniqueKey = () => 'usernames:unique';
+export const userLikesKey = (userId: string) => `users:likes#${userId}`;
+export const usernamesKey = () => 'usernames';
+
+// Items
+export const itemsKey = (itemId: string) => `items#${itemId}`;
+export const itemsByViewsKey = () => 'items:views';
