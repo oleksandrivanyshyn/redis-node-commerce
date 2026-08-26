@@ -16,15 +16,14 @@ export const getItem = async (id: string) => {
 };
 
 export const getItems = async (ids: string[]) => {
-  const items: Item[] = [];
-  for (const id of ids) {
-    const item = await client.hGetAll(itemsKey(id));
-    if (Object.keys(item).length > 0) {
-
-      items.push(deserialize(id, item));
+  const commands = ids.map((id) => client.hGetAll(itemsKey(id)));
+  const results = await Promise.all(commands);
+  return results.map((item, i) => {
+    if (Object.keys(item).length === 0) {
+      return null;
     }
-  }
-  return items;
+    return deserialize(ids[i], item);
+  });
 };
 
 export const createItem = async (attrs: CreateItemAttrs) => {
