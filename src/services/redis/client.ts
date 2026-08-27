@@ -8,6 +8,21 @@ const client = createClient({
   },
   ...(process.env.REDIS_PW ? { password: process.env.REDIS_PW } : {}),
   scripts: {
+    unlock: defineScript({
+      NUMBER_OF_KEYS: 1,
+      transformArguments(key: string, token: string) {
+        return [key, token];
+      },
+      transformReply(reply: any) {
+        return reply;
+      },
+      SCRIPT: `
+        if redis.call('GET', KEYS[1]) == ARGV[1] then
+          return redis.call('DEL', KEYS[1])
+        end
+      `,
+    }),
+
     addOneAndStore: defineScript({
       NUMBER_OF_KEYS: 1,
       SCRIPT: `
@@ -20,6 +35,7 @@ const client = createClient({
         return reply;
       },
     }),
+
     incrementView: defineScript({
       NUMBER_OF_KEYS: 3,
       SCRIPT: `
@@ -51,6 +67,7 @@ const client = createClient({
 });
 
 client.on('error', (err) => console.error(err));
+
 client.connect();
 
 export { client };
