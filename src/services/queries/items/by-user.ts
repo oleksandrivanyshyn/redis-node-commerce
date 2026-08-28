@@ -10,6 +10,10 @@ interface QueryOpts {
 }
 
 export const itemsByUser = async (userId: string, opts: QueryOpts) => {
+  if (!userId) {
+    return { totalPages: 0, items: [] };
+  }
+
   const query = `@ownerId:{${userId}}`;
 
   const sortCriteria = opts.sortBy &&
