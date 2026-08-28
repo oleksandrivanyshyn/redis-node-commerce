@@ -47,9 +47,6 @@ const pause = async (p: number) => {
   });
 };
 
-// Grab these from your browser after signing in and opening an item page:
-//   cookie  -> devtools > Application > Cookies > 'auth'  (as `auth=<value>`)
-//   itemId  -> the id in the /items/<id> URL
 const cookie = process.env.AUCTION_COOKIE || 'auth=<paste-auth-cookie-here>';
 const itemId = process.env.AUCTION_ITEM_ID || '<paste-item-id-here>';
 const attempts = 50;

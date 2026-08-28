@@ -1,30 +1,3 @@
-<!-- <script lang="ts" context="module">
-	import type { Load } from '@sveltejs/kit';
-	import { session } from '$app/stores';
-	import { browser } from '$app/env';
-	import { f } from '$lib/fetch';
-
-	let lastHref = '';
-	export const load: Load = async ({ fetch, url }) => {
-		if (!browser) {
-			return {};
-		}
-
-		if (lastHref === '') {
-			lastHref = url.href;
-			return {};
-		}
-		if (lastHref === url.href) {
-			return {};
-		}
-		lastHref = url.href;
-
-		const [data] = await f('/sessions', {}, fetch);
-		session.set(data);
-
-		return {};
-	};
-</script> -->
 <script>
 	import '../app.css';
 	import Footer from '$lib/components/footer.svelte';
