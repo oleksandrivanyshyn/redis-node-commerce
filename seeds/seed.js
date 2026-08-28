@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import _ from 'lodash';
-import { createClient } from 'redis';
+import { createClient, SchemaFieldTypes } from 'redis';
 import { DateTime } from 'luxon';
 import fs from 'fs/promises';
 import {
@@ -16,7 +16,8 @@ import {
 	itemsByPriceKey,
 	itemsByEndingAtKey,
 	itemsViewsKey,
-	usernamesUniqueKey
+	usernamesUniqueKey,
+	itemsIndexKey
 } from './seed-keys.js';
 
 const client = createClient({
@@ -29,6 +30,26 @@ const client = createClient({
 
 const serializeHistory = (amount, createdAt) => {
 	return `${amount}:${createdAt}`;
+};
+
+const createIndex = () => {
+	return client.ft.create(
+		itemsIndexKey(),
+		{
+			name: { type: SchemaFieldTypes.TEXT, sortable: true },
+			description: { type: SchemaFieldTypes.TEXT, sortable: false },
+			ownerId: { type: SchemaFieldTypes.TAG, sortable: false },
+			endingAt: { type: SchemaFieldTypes.NUMERIC, sortable: true },
+			bids: { type: SchemaFieldTypes.NUMERIC, sortable: true },
+			views: { type: SchemaFieldTypes.NUMERIC, sortable: true },
+			price: { type: SchemaFieldTypes.NUMERIC, sortable: true },
+			likes: { type: SchemaFieldTypes.NUMERIC, sortable: true }
+		},
+		{
+			ON: 'HASH',
+			PREFIX: itemsKey('')
+		}
+	);
 };
 
 const run = async () => {
@@ -109,6 +130,8 @@ const run = async () => {
 	});
 
 	await Promise.all([...itemPromises, ...userPromises, ...bidPromises]);
+
+	await createIndex();
 
 	client.quit();
 };
