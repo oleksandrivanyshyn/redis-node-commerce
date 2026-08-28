@@ -9,11 +9,17 @@ const config = {
 	kit: {
 		floc: true,
 		adapter: adapter({ out: 'dist' }),
+		prerender: {
+			enabled: false
+		},
 		vite: {
 			resolve: {
 				alias: {
 					$services: resolve('./src/services')
 				}
+			},
+			ssr: {
+				noExternal: ['chart.js', 'chartjs-adapter-luxon']
 			}
 		}
 	}
