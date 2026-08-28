@@ -1,11 +1,9 @@
 import type { Handle } from '@sveltejs/kit';
-import { getCachedPage, setCachedPage } from '$services/queries/page-cache';
+import { cacheableRoutes, getCachedPage, setCachedPage } from '$services/queries/page-cache';
 import { streamToString } from '$lib/util/stream-to-string';
 
-const cacheableRoutes = ['/about', '/privacy', '/auth/signin', '/auth/signup'];
-
 export const useCachePage: Handle = async ({ event, resolve }) => {
-	if (!cacheableRoutes.includes(event.url.pathname)) {
+	if (event.request.method !== 'GET' || !cacheableRoutes.includes(event.url.pathname)) {
 		return resolve(event);
 	}
 
@@ -22,8 +20,11 @@ export const useCachePage: Handle = async ({ event, resolve }) => {
 	event.request.headers.set('if-none-match', Math.random().toString());
 	const res = await resolve(event);
 
-	const resCache = res.clone();
-	const body = await streamToString(resCache.body);
+	if (!res.body) {
+		return res;
+	}
+
+	const body = await streamToString(res.clone().body);
 	await setCachedPage(event.url.pathname, body);
 
 	return res;
