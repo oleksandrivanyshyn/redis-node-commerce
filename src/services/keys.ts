@@ -12,3 +12,9 @@ export const itemsViewsKey = (itemId: string) => `items:views#${itemId}`;
 export const bidHistoryKey = (itemId: string) => `history#${itemId}`;
 export const itemsByPriceKey = () => 'items:price';
 export const itemsIndexKey = () => 'idx:items';
+
+export const jobsDelayedKey = () => 'jobs:delayed';
+export const jobsActiveKey = () => 'jobs:active';
+export const jobsFailedKey = () => 'jobs:failed';
+export const jobsCompletedKey = () => 'jobs:completed';
+export const jobsGroupName = () => 'jobs:workers';

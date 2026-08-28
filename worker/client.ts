@@ -2,13 +2,13 @@ import { createClient } from 'redis';
 
 const client = createClient({
 	socket: {
-		host: process.env.REDIS_HOST,
-		port: parseInt(process.env.REDIS_PORT)
+		host: process.env.REDIS_HOST || 'localhost',
+		port: parseInt(process.env.REDIS_PORT || '6379')
 	},
-	password: process.env.REDIS_PW
+	...(process.env.REDIS_PW ? { password: process.env.REDIS_PW } : {})
 });
 
-client.on('error', (err) => console.log(err));
+client.on('error', (err) => console.error(err));
 
 export { client };
 export type Client = typeof client;
