@@ -11,9 +11,9 @@
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
 		"seed": "node ./seeds/seed.js",
-		"worker": "ts-node-dev ./worker/index.ts",
+		"worker": "ts-node-dev -r tsconfig-paths/register ./worker/index.ts",
 		"cli": "node cli/index.js",
-		"sandbox": "ts-node-dev -T ./sandbox/index.ts",
+		"sandbox": "ts-node-dev -T -r tsconfig-paths/register ./sandbox/index.ts",
 		"sandbox:bids": "ts-node-dev -T ./sandbox/bid-stress.ts"
 	},
 	"devDependencies": {
@@ -27,6 +27,7 @@
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.9.4",
 		"tailwindcss": "^3.0.22",
+		"tsconfig-paths": "^4.2.0",
 		"tslib": "^2.3.1",
 		"typescript": "^4.4.3"
 	},
